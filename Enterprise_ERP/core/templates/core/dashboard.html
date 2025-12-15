@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+<h2>Dashboard</h2>
+
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}</p>
+    <p>Role: {{ user.role }}</p>
+
+    {% if user.role == "SUPER_ADMIN" %}
+        <h3>Super Admin Dashboardghhh</h3>
+        <ul>
+            {% for module in erp_modules %}
+                <li>{{ module.name }} ({{ module.code }})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You should be redirected to your ERP module.</p>
+    {% endif %}
+    <div style="margin-bottom: 20px;">
+        <span>Logged in as: <strong>{{ user.username }}</strong></span>
+        |
+        <a href="{% url 'accounts:logout' %}">Logout</a>
+    </div>
+{% else %}
+    <p>Not logged in</p>
+{% endif %}
+
+</body>
+</html>
+

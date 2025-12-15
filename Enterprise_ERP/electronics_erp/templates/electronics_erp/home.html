@@ -1,0 +1,136 @@
+{% extends "core/client/base.html" %}
+
+{% block content %}
+
+<style>
+    .erp-header {
+        margin-bottom: 28px;
+    }
+
+    .erp-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-bottom: 12px;
+    }
+
+    .erp-title {
+        font-size: 22px;
+        font-weight: 600;
+        margin: 0;
+        color: #1f2937;
+    }
+
+    .erp-subtitle {
+        margin-top: 6px;
+        font-size: 14px;
+        color: #6b7280;
+    }
+
+    .erp-grid {
+        margin-top: 32px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 22px;
+    }
+
+    .erp-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .erp-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 18px 38px rgba(0, 0, 0, 0.08);
+    }
+
+    .erp-card h4 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .erp-card p {
+        margin-top: 8px;
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .erp-status {
+        margin-top: 14px;
+        font-size: 12px;
+        color: #9ca3af;
+    }
+
+    @media (max-width: 768px) {
+        .erp-grid {
+            gap: 16px;
+        }
+    }
+</style>
+
+<!-- ================= HEADER ================= -->
+<div class="erp-header">
+
+    <div class="erp-badge">
+        <i data-lucide="cpu"></i>
+        Electronics ERP
+    </div>
+
+    <h2 class="erp-title">Electronics ERP Dashboard</h2>
+    <p class="erp-subtitle">
+        Manage electronic products, inventory, and billing operations.
+    </p>
+</div>
+
+<!-- ================= MODULE CARDS ================= -->
+<div class="erp-grid">
+   <a href="{% url 'electronics_erp:electronics_list' %}" class="erp-card">
+    <h4>
+        <i data-lucide="package"></i>
+        Products
+    </h4>
+    <p>Manage electronic products, specifications, and pricing.</p>
+    <div class="erp-status">Available</div>
+</a>
+
+
+    <div class="erp-card">
+        <h4>
+            <i data-lucide="warehouse"></i>
+            Stock Management
+        </h4>
+        <p>
+            Track inventory levels and warehouse movement.
+        </p>
+        <div class="erp-status">Coming Soon</div>
+    </div>
+
+    <div class="erp-card">
+        <h4>
+            <i data-lucide="receipt"></i>
+            Billing
+        </h4>
+        <p>
+            Generate invoices and manage customer billing.
+        </p>
+        <div class="erp-status">Coming Soon</div>
+    </div>
+
+</div>
+
+{% endblock %}

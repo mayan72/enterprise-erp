@@ -1,0 +1,188 @@
+{% extends "core/admin/base.html" %}
+
+{% block content %}
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 26px;
+    }
+
+    .page-title h2 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .page-title span {
+        display: block;
+        font-size: 13px;
+        color: #6b7280;
+        margin-top: 4px;
+    }
+
+    .btn-primary {
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 500;
+        background: #2563eb;
+        color: #ffffff;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .btn-primary:hover {
+        background: #1e40af;
+        transform: translateY(-1px);
+    }
+
+    .table-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+        overflow: hidden;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    th {
+        text-align: left;
+        padding: 14px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    td {
+        padding: 14px 18px;
+        font-size: 14px;
+        color: #1f2937;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    tbody tr {
+        transition: background 0.15s ease;
+    }
+
+    tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .badge {
+        padding: 5px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 500;
+        display: inline-block;
+    }
+
+    .badge-active {
+        background: #ecfdf5;
+        color: #047857;
+    }
+
+    .badge-inactive {
+        background: #fef2f2;
+        color: #b91c1c;
+    }
+
+    .action-form {
+        display: inline;
+    }
+
+    .btn-secondary {
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        border: 1px solid #d1d5db;
+        background: #ffffff;
+        color: #374151;
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+        background: #f3f4f6;
+    }
+</style>
+
+<!-- ================= PAGE HEADER ================= -->
+<div class="page-header">
+    <div class="page-title">
+        <h2>ERP Modules</h2>
+        <span>Manage available ERP business modules</span>
+    </div>
+
+    <a href="{% url 'core:admin_erp_create' %}" class="btn-primary">
+        + Add ERP Module
+    </a>
+</div>
+
+<!-- ================= TABLE ================= -->
+<div class="table-card">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for erp in modules %}
+            <tr>
+                <td>{{ erp.name }}</td>
+                <td>{{ erp.code }}</td>
+
+                <td>
+                    {% if erp.is_active %}
+                        <span class="badge badge-active">Active</span>
+                    {% else %}
+                        <span class="badge badge-inactive">Inactive</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    <form method="post"
+                          action="{% url 'core:admin_erp_toggle' erp.id %}"
+                          class="action-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-secondary">
+                            {% if erp.is_active %}Deactivate{% else %}Activate{% endif %}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4" style="text-align:center; padding:32px; color:#6b7280;">
+                    No ERP modules found.
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

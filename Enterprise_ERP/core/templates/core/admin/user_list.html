@@ -1,0 +1,194 @@
+{% extends "core/admin/base.html" %}
+
+{% block content %}
+
+<style>
+    /* ===== PAGE HEADER ===== */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 26px;
+    }
+
+    .page-title h2 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .page-title span {
+        font-size: 13px;
+        color: #6b7280;
+        margin-top: 4px;
+        display: block;
+    }
+
+    /* ===== TABLE CARD ===== */
+    .table-card {
+        background: #ffffff;
+        border-radius: 14px;
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    th {
+        text-align: left;
+        padding: 14px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    td {
+        padding: 14px 18px;
+        font-size: 14px;
+        color: #1f2937;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    tbody tr {
+        transition: background 0.15s ease;
+    }
+
+    tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    /* ===== BADGES ===== */
+    .badge {
+        padding: 5px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 500;
+        display: inline-block;
+    }
+
+    .badge-active {
+        background: #ecfdf5;
+        color: #047857;
+    }
+
+    .badge-inactive {
+        background: #fef2f2;
+        color: #b91c1c;
+    }
+
+    .badge-role {
+        background: #eef2ff;
+        color: #1e40af;
+    }
+
+    .module-muted {
+        color: #9ca3af;
+        font-size: 13px;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+        padding: 40px;
+        text-align: center;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .btn-primary {
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 500;
+        background: #2563eb;
+        color: #ffffff;
+        text-decoration: none;
+        transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .btn-primary:hover {
+        background: #1e40af;
+        transform: translateY(-1px);
+    }
+
+</style>
+
+<!-- ================= PAGE HEADER ================= -->
+
+<!-- ================= TABLE ================= -->
+<div class="table-card">
+
+    <div class="page-header">
+    <div class="page-title">
+        <h2>User Management</h2>
+        <span>Manage platform users, roles, and ERP access</span>
+    </div>
+
+    <a href="{% url 'core:admin_user_create' %}" class="btn-primary">
+        + Create User
+    </a>
+    </div>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Role</th>
+                <th>ERP Module</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+
+                <td>
+                    <span class="badge badge-role">
+                        {{ user.role|default:"User" }}
+                    </span>
+                </td>
+
+                <td>
+                    {% if user.subscription and user.subscription.erp_module %}
+                        {{ user.subscription.erp_module.name }}
+                    {% else %}
+                        <span class="module-muted">Not Assigned</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if user.is_active %}
+                        <span class="badge badge-active">Active</span>
+                    {% else %}
+                        <span class="badge badge-inactive">Inactive</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4">
+                    <div class="empty-state">
+                        No users found in the system.
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

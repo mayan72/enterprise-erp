@@ -1,0 +1,19 @@
+{% extends "core/client/base.html" %}
+
+{% block content %}
+
+<div class="erp-badge">
+    <i data-lucide="{{ erp.icon }}"></i>
+    {{ erp.name }}
+</div>
+
+<h2>{{ erp.name }} Dashboard</h2>
+<p>Manage operations for {{ erp.name }}</p>
+
+<div class="erp-grid">
+    <div class="erp-card">Products (Coming Soon)</div>
+    <div class="erp-card">Stock (Coming Soon)</div>
+    <div class="erp-card">Billing (Coming Soon)</div>
+</div>
+
+{% endblock %}

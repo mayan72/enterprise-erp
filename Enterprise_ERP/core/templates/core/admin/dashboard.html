@@ -1,0 +1,165 @@
+{% extends "core/admin/base.html" %}
+
+{% block content %}
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 28px;
+    }
+
+    .page-title {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .page-title h2 {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .page-title span {
+        font-size: 13px;
+        color: #6b7280;
+        margin-top: 4px;
+    }
+
+    .role-badge {
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 500;
+        background: #eef2ff;
+        color: #1e40af;
+    }
+
+    .welcome-card {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 24px 28px;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+        margin-bottom: 32px;
+    }
+
+    .welcome-card h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .welcome-card p {
+        margin-top: 8px;
+        font-size: 14px;
+        color: #4b5563;
+        max-width: 720px;
+        line-height: 1.5;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 22px;
+    }
+
+    .dashboard-card {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 22px;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    .dashboard-card h4 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .dashboard-card p {
+        margin-top: 8px;
+        font-size: 13px;
+        color: #6b7280;
+        line-height: 1.4;
+    }
+
+    .dashboard-card .meta {
+        margin-top: 16px;
+        font-size: 12px;
+        color: #9ca3af;
+    }
+</style>
+
+<!-- ================= PAGE HEADER ================= -->
+<div class="page-header">
+    <div class="page-title">
+        <h2>Super Admin Dashboard</h2>
+        <span>Enterprise ERP Control Center</span>
+    </div>
+
+    <div class="role-badge">
+        SUPER ADMIN
+    </div>
+</div>
+
+<!-- ================= WELCOME ================= -->
+<div class="welcome-card">
+    <h3>Welcome back, {{ request.user.username }}</h3>
+    <p>
+        You have full administrative access to manage users, business modules,
+        subscriptions, and system-wide configurations across the Enterprise ERP platform.
+    </p>
+</div>
+
+<!-- ================= DASHBOARD GRID ================= -->
+<div class="dashboard-grid">
+
+
+    <a href="{% url 'core:admin_user_list' %}" style="text-decoration:none;">
+    <div class="dashboard-card">
+        <h4>User Management</h4>
+        <p>Manage enterprise users and roles</p>
+    </div>
+    </a>
+
+    <a href="{% url 'core:admin_erp_list' %}" style="text-decoration:none;">
+    <div class="dashboard-card">
+        <h4>ERP Management</h4>
+        <p>Manage business ERP Management and activation status</p>
+    </div>
+    </a>
+
+
+
+    <div class="dashboard-card">
+        <h4>Business Modules</h4>
+        <p>Enable or disable ERP modules for different business domains.</p>
+        <div class="meta">Medical • Electronics • Retail</div>
+    </div>
+
+    <div class="dashboard-card">
+        <h4>Subscriptions</h4>
+        <p>Manage plans, billing cycles, and customer entitlements.</p>
+        <div class="meta">Plans • Expiry • Renewals</div>
+    </div>
+
+    <div class="dashboard-card">
+        <h4>System Configuration</h4>
+        <p>Global settings, integrations, and platform configurations.</p>
+        <div class="meta">Security • APIs • Logging</div>
+    </div>
+
+</div>
+
+{% endblock %}
