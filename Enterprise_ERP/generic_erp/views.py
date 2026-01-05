@@ -1,8 +1,8 @@
-from django.shortcuts import render
-from django.views.generic import ListView, TemplateView
+from django.shortcuts import get_object_or_404
+from django.views.generic import TemplateView
 from core.mixins import UserDataMixin
+from core.models import ERPModule
 
-# Create your views here.
 class GenericERPHomeView(UserDataMixin, TemplateView):
     template_name = "generic_erp/home.html"
 
@@ -10,7 +10,8 @@ class GenericERPHomeView(UserDataMixin, TemplateView):
         self.erp = get_object_or_404(
             ERPModule,
             code=kwargs["erp_code"],
-            active=True
+            is_active=True,
+            is_legacy=False
         )
         return super().dispatch(request, *args, **kwargs)
 

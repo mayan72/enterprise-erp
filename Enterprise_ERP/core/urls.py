@@ -4,6 +4,8 @@ from core.admin_views import (
     AdminUserListView,
     AdminUserCreateView,
     ToggleErpStatusView,
+    ViewUserDashboardView,
+    ExitUserDashboardView
 )
 
 app_name = "core"
@@ -26,6 +28,16 @@ urlpatterns += [
     
     path("admin/erps/", ErpModuleListView.as_view(), name="admin_erp_list"),
     path("admin/erps/<int:pk>/toggle/", ToggleErpStatusView.as_view(), name="admin_erp_toggle"),
+    path(
+        "admin/view-user/<int:user_id>/",
+        ViewUserDashboardView.as_view(),
+        name="view_user_dashboard"
+    ),
+    path(
+        "admin/exit-view/",
+        ExitUserDashboardView.as_view(),
+        name="exit_user_dashboard"
+    ),
 ]
 
 

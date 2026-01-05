@@ -43,7 +43,7 @@ class ModuleAccessRequiredMixin(RoleRequiredMixin):
         except Subscription.DoesNotExist:
             raise PermissionDenied("You do not have any active ERP subscription.")
 
-        if not subscription.is_active():
+        if not subscription.is_active:
             raise PermissionDenied("Your subscription is inactive or expired.")
 
         if subscription.erp_module.code != self.module_code:
@@ -74,3 +74,15 @@ class SuperAdminRequiredMixin:
 
         return super().dispatch(request, *args, **kwargs)
 
+def get_effective_user(request):
+    if (
+        request.user.is_authenticated
+        and request.user.is_super_admin()
+        and request.session.get("viewing_user_id")
+    ):
+        try:
+            return User.objects.get(id=request.session["viewing_user_id"])
+        except User.DoesNotExist:
+            pass
+
+    return request.user

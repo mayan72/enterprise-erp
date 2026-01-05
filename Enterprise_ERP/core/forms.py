@@ -1,27 +1,39 @@
 from django import forms
-from subscriptions.models import ErpModule
+from core.models import ERPModule
 
+
+# class AdminUserCreateForm(forms.Form):
+#     erp_module = forms.ModelChoiceField(
+#         queryset=ERPModule.objects.filter(is_active=True),
+#         required=True
+#     )
+
+
+from subscriptions.models import Subscription
 
 class AdminUserCreateForm(forms.Form):
     username = forms.CharField(max_length=150)
     password = forms.CharField(widget=forms.PasswordInput)
-    erp_module = forms.ModelChoiceField(
-        queryset=ErpModule.objects.filter(is_active=True)
-    )
     is_active = forms.BooleanField(required=False, initial=True)
 
-from django import forms
-from subscriptions.models import ErpModule
+    erp_module = forms.ModelChoiceField(
+        queryset=ERPModule.objects.filter(is_active=True)
+    )
+
+    plan = forms.ChoiceField(
+        choices=Subscription.Plan.choices,
+        required=True,
+        initial=Subscription.Plan.THREE_MONTHS,
+        label="Subscription Plan"
+    )
 
 
 class ErpModuleCreateForm(forms.ModelForm):
     class Meta:
-        model = ErpModule
-        fields = [
-            "code",
+        model = ERPModule
+        fields = (
             "name",
-            "app_label",
-            "url_namespace",
-            "description",
+            "code",
+            "icon",
             "is_active",
-        ]
+        )

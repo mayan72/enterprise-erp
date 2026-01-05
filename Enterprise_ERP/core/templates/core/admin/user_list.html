@@ -152,7 +152,7 @@
 
         <tbody>
         {% for user in users %}
-            <tr>
+            <!-- <tr>
                 <td>{{ user.username }}</td>
 
                 <td>
@@ -176,7 +176,46 @@
                         <span class="badge badge-inactive">Inactive</span>
                     {% endif %}
                 </td>
-            </tr>
+            </tr> -->
+
+            <tr>
+    <td>{{ user.username }}</td>
+
+    <td>
+        <span class="badge badge-role">
+            {{ user.role|default:"User" }}
+        </span>
+    </td>
+
+    <td>
+        {% if user.subscription and user.subscription.erp_module %}
+            {{ user.subscription.erp_module.name }}
+        {% else %}
+            <span class="module-muted">Not Assigned</span>
+        {% endif %}
+    </td>
+
+    <td>
+        {% if user.is_active %}
+            <span class="badge badge-active">Active</span>
+        {% else %}
+            <span class="badge badge-inactive">Inactive</span>
+        {% endif %}
+    </td>
+
+    <td>
+        {% if user.subscription and user.subscription.erp_module %}
+            <a href="{% url 'core:view_user_dashboard' user.id %}"
+               class="btn-primary"
+               style="padding:6px 12px; font-size:12px;">
+                View Dashboard
+            </a>
+        {% else %}
+            <span class="module-muted">—</span>
+        {% endif %}
+    </td>
+</tr>
+
         {% empty %}
             <tr>
                 <td colspan="4">

@@ -30,7 +30,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from core.views import DashboardView
+from core.views import DashboardView, ERPDispatcherView
 
 urlpatterns = [
     path("", DashboardView.as_view(), name="root_dashboard"),
@@ -41,4 +41,6 @@ urlpatterns = [
     path("electronics/", include("electronics_erp.urls")),
 
     path("", include("core.urls")),  # super admin urls
+    path("erp/<str:erp_code>/", ERPDispatcherView.as_view(), name="erp-dispatch"),
+    path("generic/", include("generic_erp.urls")),
 ]

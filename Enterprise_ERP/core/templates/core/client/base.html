@@ -141,8 +141,21 @@
 <!-- ===== HEADER ===== -->
 <header class="client-header">
     <div class="client-brand">
-        <!-- <i data-lucide="heart-pulse"></i> -->
-        {{ request.user.subscription.erp_module.name|default:"Medical ERP" }}
+        {% if request.user.is_super_admin and request.session.viewing_user_id %}
+<div style="background:#fee2e2; padding:10px; text-align:center;">
+    Viewing dashboard as user ID {{ request.session.viewing_user_id }}
+    |
+    <a href="{% url 'core:exit_user_dashboard' %}">Exit</a>
+</div>
+{% endif %}
+
+         <!-- <i data-lucide="heart-pulse"></i>  -->
+        <!-- {{ request.user.subscription.erp_module.name|default:"Medical ERP" }} -->
+        {% if request.user.subscription.erp_module %}
+    {{ request.user.subscription.erp_module.name }}
+{% else %}
+    ERP Dashboard
+{% endif %}
     </div>
 
     <div class="client-user">

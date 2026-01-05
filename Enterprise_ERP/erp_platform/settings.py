@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-
+# import dj_database_url
 import os
 from dotenv import load_dotenv
 
@@ -28,7 +28,7 @@ load_dotenv(BASE_DIR / ".env")
 # SECRET_KEY = 'django-insecure-ewe_a1=(0t*_itc(#!vvffe0udz*fjrm84w(%d)9o*z8(8rihe'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
@@ -50,6 +50,15 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     "default": dj_database_url.config(
+#         conn_max_age=600,
+#         ssl_require=not DEBUG,
+#     )
+# }
+
+
+
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/accounts/login/"
 
@@ -70,6 +79,7 @@ INSTALLED_APPS = [
     "electronics_erp",
     "jewellery_erp",
     "laptop_erp",
+    "generic_erp",
 ]
 
 AUTH_USER_MODEL = "accounts.User"
@@ -158,8 +168,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-ENGINE = "django.db.backends.mysql"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
