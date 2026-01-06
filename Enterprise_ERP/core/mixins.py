@@ -33,7 +33,8 @@ class ModuleAccessRequiredMixin(RoleRequiredMixin):
 
         if user.is_super_admin():
             # Super Admin can access all modules
-            return super(RoleRequiredMixin, self).dispatch(request, *args, **kwargs)
+            # return super(RoleRequiredMixin, self).dispatch(request, *args, **kwargs)
+            return super().dispatch(request, *args, **kwargs)
 
         if not self.module_code:
             raise PermissionDenied("Module code is not configured for this view.")
