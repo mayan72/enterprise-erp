@@ -1,0 +1,311 @@
+{% extends "core/client/base.html" %}
+
+{% block content %}
+<style>
+  :root {
+    --bg-main: #0f172a;
+    --bg-surface: #111827;
+    --bg-card: #1f2933;
+    --border-subtle: #2a3441;
+    --text-primary: #f9fafb;
+    --text-secondary: #cbd5e1;
+    --accent-primary: #6366f1;
+    --accent-secondary: #f59e0b;
+    --radius-lg: 14px;
+    --radius-md: 10px;
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.35s ease;
+  }
+
+  .upload-layout {
+    background: linear-gradient(180deg, var(--bg-main), #020617);
+    padding: 3rem 2rem;
+    min-height: calc(100vh - 80px);
+    color: var(--text-primary);
+    animation: fadeIn 0.6s ease both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===============================
+     Header Row
+     =============================== */
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .page-header h2 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .back-link-top {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    text-decoration: none;
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast), color var(--transition-fast);
+  }
+
+  .back-link-top:hover {
+    background: rgba(99, 102, 241, 0.15);
+    color: #a5b4fc;
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 1.5rem 0;
+  }
+
+  /* ===============================
+     Upload Card
+     =============================== */
+  .upload-card {
+    background: linear-gradient(180deg, var(--bg-card), #111827);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    max-width: 640px;
+  }
+
+  .upload-card label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+  }
+
+  /* ===============================
+     Custom File Input
+     =============================== */
+  .file-input {
+    position: relative;
+    margin-top: 0.25rem;
+  }
+
+  .file-input input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .file-display {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: var(--bg-surface);
+    border: 1px dashed var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.6rem 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+
+  .file-display span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .file-display strong {
+    color: var(--accent-primary);
+    font-weight: 600;
+  }
+
+  .file-input:hover .file-display {
+    border-color: var(--accent-primary);
+    background: rgba(99, 102, 241, 0.08);
+  }
+
+  .upload-card input[type="date"] {
+    width: 100%;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.55rem 0.65rem;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .upload-card input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+  }
+
+  .upload-card button {
+    margin-top: 1.2rem;
+    background: linear-gradient(135deg, var(--accent-primary), #818cf8);
+    border: none;
+    color: #020617;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.55rem 1.25rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .upload-card button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.45);
+  }
+
+  /* ===============================
+     Table (unchanged visually)
+     =============================== */
+  .table-wrapper {
+    margin-top: 1.5rem;
+    background: linear-gradient(180deg, var(--bg-card), #111827);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  thead {
+    background: rgba(99, 102, 241, 0.12);
+  }
+
+  th {
+    text-align: left;
+    padding: 0.85rem 1rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  td {
+    padding: 0.8rem 1rem;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  td:first-child,
+  td:nth-child(2) {
+    white-space: nowrap;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  td strong {
+    color: var(--accent-secondary);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  @media (max-width: 768px) {
+    .upload-layout {
+      padding: 2rem 1.25rem;
+    }
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<div class="upload-layout">
+  <div class="page-header">
+    <h2>{{ erp.name }} – {{ upload_type|title }}</h2>
+    <a href="{% url 'generic_erp:home' erp.code %}" class="back-link-top">
+      ← Back to Dashboard
+    </a>
+  </div>
+
+  <hr class="divider">
+
+  <h3>Upload Excel</h3>
+
+  <div class="upload-card">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      {% if upload_type == "billing" %}
+        <label>Business Date</label>
+        <input type="date" name="business_date" required>
+      {% endif %}
+
+      <label>Excel File</label>
+      <div class="file-input">
+        <input type="file" name="file" accept=".xlsx,.xls" required
+               onchange="this.nextElementSibling.querySelector('span').textContent = this.files[0]?.name || 'No file selected'">
+        <div class="file-display">
+          <span>No file selected</span>
+          <strong>Choose File</strong>
+        </div>
+      </div>
+
+      <button type="submit">Upload</button>
+    </form>
+  </div>
+
+  <hr class="divider">
+
+  <h3>Uploaded Records</h3>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Uploaded At</th>
+          <th>Business Date</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in records %}
+        <tr>
+          <td>{{ r.uploaded_at }}</td>
+          <td>{{ r.business_date|default:"-" }}</td>
+          <td>
+            {% for k, v in r.row_data.items %}
+              <strong>{{ k }}</strong>: {{ v }}<br>
+            {% endfor %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3">
+            <div class="empty-state">No uploads yet.</div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

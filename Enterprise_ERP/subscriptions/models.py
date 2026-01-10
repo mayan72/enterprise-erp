@@ -1,49 +1,6 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from core.models import ERPModule  # ✅ canonical model
-
-
-# class Subscription(models.Model):
-#     class Status(models.TextChoices):
-#         ACTIVE = "ACTIVE"
-#         INACTIVE = "INACTIVE"
-
-#     user = models.OneToOneField(
-#         settings.AUTH_USER_MODEL,
-#         on_delete=models.CASCADE,
-#         related_name="subscription"
-#     )
-
-    
-# #     erp_module = models.ForeignKey(
-# #     ERPModule,
-# #     on_delete=models.PROTECT,
-# #     related_name="subscriptions",
-# # )
-#     erp_module = models.ForeignKey(
-#         "core.ERPModule",
-#         on_delete=models.PROTECT,
-#         related_name="subscriptions"
-#     )
-
-
-#     status = models.CharField(
-#         max_length=20,
-#         choices=Status.choices,
-#         default=Status.ACTIVE
-#     )
-
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     expires_at = models.DateTimeField(null=True, blank=True)
-
-#     @property
-#     def is_active(self):
-#         return self.status == self.Status.ACTIVE
-
-
-from django.db import models
-from django.utils import timezone
 from datetime import timedelta
 
 

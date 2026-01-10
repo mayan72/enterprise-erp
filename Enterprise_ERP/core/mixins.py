@@ -3,6 +3,11 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest
 from subscriptions.models import Subscription
 
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+
 class RoleRequiredMixin(LoginRequiredMixin):
     """
     Restrict access based on User.role.
@@ -87,3 +92,65 @@ def get_effective_user(request):
             pass
 
     return request.user
+
+# class TenantContextMixin:
+#     """
+#     In this ERP system:
+#     Tenant = Subscription (User + ERPModule)
+#     """
+
+#     def dispatch(self, request, *args, **kwargs):
+#         if not request.user.is_authenticated:
+#             return super().dispatch(request, *args, **kwargs)
+
+#         # Handle super-admin impersonation
+#         effective_user = get_effective_user(request)
+
+#         # Super admin without impersonation has no tenant context
+#         if effective_user.is_super_admin() and effective_user == request.user:
+#             request.tenant = None
+#             return super().dispatch(request, *args, **kwargs)
+
+#         try:
+#             subscription = effective_user.subscription
+#         except Subscription.DoesNotExist:
+#             raise PermissionDenied("Tenant could not be resolved: no subscription")
+
+#         if not subscription.is_active:
+#             raise PermissionDenied("Tenant subscription is inactive or expired")
+
+#         # 🔑 Tenant IS the subscription
+#         request.tenant = subscription
+
+#         return super().dispatch(request, *args, **kwargs)
+
+class TenantContextMixin:
+    """
+    Tenant = Subscription of the effective user
+    """
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+
+        effective_user = get_effective_user(request)
+
+        # Super admin without impersonation → no tenant context
+        if effective_user.is_super_admin() and effective_user == request.user:
+            request.tenant = None
+            request.effective_user = effective_user
+            return super().dispatch(request, *args, **kwargs)
+
+        try:
+            subscription = effective_user.subscription
+        except Exception:
+            raise PermissionDenied("No active subscription for selected user")
+
+        if not subscription.is_active:
+            raise PermissionDenied("Subscription inactive or expired")
+
+        # ✅ Tenant = subscription
+        request.tenant = subscription
+        request.effective_user = effective_user
+
+        return super().dispatch(request, *args, **kwargs)

@@ -3,101 +3,221 @@
 {% block content %}
 
 <style>
+    /* ================= PREMIUM DARK ERP TOKENS ================= */
+    :root {
+        /* Core Palette (as requested) */
+        --bg-main: #0F172A;        /* Deep Navy */
+        --bg-sidebar: #111827;     /* Midnight Blue */
+        --bg-card: #1E293B;        /* Dark Slate */
+
+        --primary: #38BDF8;        /* Electric Blue */
+        --accent: #10B981;         /* Emerald */
+
+        --text-main: #E5E7EB;      /* Light Gray */
+        --text-muted: #94A3B8;     /* Muted Blue */
+
+        --border: #273244;         /* Subtle Dark */
+
+        --radius: 16px;
+
+        --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.35);
+        --shadow-hover: 0 22px 50px rgba(0, 0, 0, 0.55);
+    }
+
+    /* ================= PAGE HEADER ================= */
     .page-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 28px;
+        margin-bottom: 32px;
+        animation: fadeDown 0.6s ease;
     }
 
-    .page-title {
-        display: flex;
-        flex-direction: column;
+    @keyframes fadeDown {
+        from { opacity: 0; transform: translateY(-12px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
 
     .page-title h2 {
         margin: 0;
-        font-size: 22px;
-        font-weight: 600;
-        color: #1f2937;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-main);
+        letter-spacing: 0.3px;
     }
 
     .page-title span {
         font-size: 13px;
-        color: #6b7280;
+        color: var(--text-muted);
         margin-top: 4px;
+        display: block;
+    }
+
+    .page-header::after {
+        content: "";
+        display: block;
+        height: 1px;
+        width: 100%;
+        margin-top: 22px;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(56,189,248,0.45),
+            transparent
+        );
     }
 
     .role-badge {
-        padding: 6px 14px;
+        padding: 8px 22px;
         border-radius: 999px;
         font-size: 12px;
-        font-weight: 500;
-        background: #eef2ff;
-        color: #1e40af;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #020617;
+        letter-spacing: 0.6px;
+        box-shadow: var(--shadow-soft);
     }
 
+    /* ================= WELCOME CARD ================= */
     .welcome-card {
-        background: #ffffff;
-        border-radius: 14px;
-        padding: 24px 28px;
-        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
-        margin-bottom: 32px;
+        background: linear-gradient(
+            180deg,
+            rgba(30,41,59,0.95),
+            rgba(30,41,59,1)
+        );
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 28px 32px;
+        box-shadow: var(--shadow-soft);
+        margin-bottom: 36px;
+        animation: fadeUp 0.7s ease;
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
 
     .welcome-card h3 {
         margin: 0;
-        font-size: 18px;
+        font-size: 20px;
         font-weight: 600;
-        color: #111827;
+        color: var(--text-main);
     }
 
     .welcome-card p {
-        margin-top: 8px;
+        margin-top: 10px;
         font-size: 14px;
-        color: #4b5563;
-        max-width: 720px;
-        line-height: 1.5;
+        color: var(--text-muted);
+        max-width: 760px;
+        line-height: 1.6;
     }
 
+    /* ================= DASHBOARD GRID ================= */
     .dashboard-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        gap: 22px;
+        gap: 26px;
+        position: relative;
+        animation: fadeUp 0.8s ease;
     }
 
+    .dashboard-grid::before {
+        content: "";
+        position: absolute;
+        inset: -40px;
+        background:
+            radial-gradient(600px circle at 20% 0%, rgba(56,189,248,0.10), transparent 55%),
+            radial-gradient(500px circle at 80% 100%, rgba(16,185,129,0.10), transparent 55%);
+        z-index: -1;
+    }
+
+    /* ================= DASHBOARD CARD ================= */
     .dashboard-card {
-        background: #ffffff;
-        border-radius: 14px;
-        padding: 22px;
-        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.05);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        background: linear-gradient(
+            180deg,
+            var(--bg-card),
+            #162033
+        );
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 24px;
+        box-shadow: var(--shadow-soft);
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
         cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dashboard-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            120deg,
+            rgba(56,189,248,0.15),
+            rgba(16,185,129,0.12),
+            transparent 60%
+        );
+        opacity: 0;
+        transition: opacity 0.25s ease;
+    }
+
+    .dashboard-card::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, var(--primary), var(--accent));
+        opacity: 0;
+        transition: opacity 0.25s ease;
+    }
+
+    .dashboard-card:hover::before,
+    .dashboard-card:hover::after {
+        opacity: 1;
     }
 
     .dashboard-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
+        transform: translateY(-6px);
+        border-color: rgba(56,189,248,0.45);
+        box-shadow: var(--shadow-hover);
     }
 
     .dashboard-card h4 {
         margin: 0;
         font-size: 16px;
         font-weight: 600;
-        color: #1f2937;
+        color: var(--text-main);
+        letter-spacing: 0.2px;
     }
 
     .dashboard-card p {
         margin-top: 8px;
         font-size: 13px;
-        color: #6b7280;
-        line-height: 1.4;
+        color: var(--text-muted);
+        line-height: 1.5;
     }
 
     .dashboard-card .meta {
         margin-top: 16px;
         font-size: 12px;
-        color: #9ca3af;
+        color: #7dd3fc;
+        font-weight: 600;
+    }
+
+    .dashboard-card:focus-visible {
+        outline: 3px solid rgba(56,189,248,0.45);
+        outline-offset: 3px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation: none !important;
+            transition: none !important;
+        }
     }
 </style>
 
@@ -117,34 +237,31 @@
 <div class="welcome-card">
     <h3>Welcome back, {{ request.user.username }}</h3>
     <p>
-        You have full administrative access to manage users, business modules,
-        subscriptions, and system-wide configurations across the Enterprise ERP platform.
+        You have full administrative access to manage users, ERP modules,
+        subscriptions, and system-wide configurations across the platform.
     </p>
 </div>
 
 <!-- ================= DASHBOARD GRID ================= -->
 <div class="dashboard-grid">
 
-
     <a href="{% url 'core:admin_user_list' %}" style="text-decoration:none;">
-    <div class="dashboard-card">
-        <h4>User Management</h4>
-        <p>Manage enterprise users and roles</p>
-    </div>
+        <div class="dashboard-card">
+            <h4>User Management</h4>
+            <p>Manage enterprise users, roles, and permissions.</p>
+        </div>
     </a>
 
     <a href="{% url 'core:admin_erp_list' %}" style="text-decoration:none;">
-    <div class="dashboard-card">
-        <h4>ERP Management</h4>
-        <p>Manage business ERP Management and activation status</p>
-    </div>
+        <div class="dashboard-card">
+            <h4>ERP Management</h4>
+            <p>Manage business ERP modules and activation status.</p>
+        </div>
     </a>
-
-
 
     <div class="dashboard-card">
         <h4>Business Modules</h4>
-        <p>Enable or disable ERP modules for different business domains.</p>
+        <p>Enable or disable ERP modules across domains.</p>
         <div class="meta">Medical • Electronics • Retail</div>
     </div>
 
@@ -156,7 +273,7 @@
 
     <div class="dashboard-card">
         <h4>System Configuration</h4>
-        <p>Global settings, integrations, and platform configurations.</p>
+        <p>Global settings, integrations, and platform security.</p>
         <div class="meta">Security • APIs • Logging</div>
     </div>
 

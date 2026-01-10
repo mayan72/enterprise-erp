@@ -15,18 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-# from django.urls import path, include
 
-# urlpatterns = [
-#     path("accounts/", include("accounts.urls", namespace="accounts")),
-#     path("", include("core.urls", namespace="core")),  # dashboard, landing
-
-#     # ERP modules as tabs, each with its own URL namespace
-#     path("medical/", include("medical_erp.urls", namespace="medical_erp")),
-#     path("electronics/", include("electronics_erp.urls", namespace="electronics_erp")),
-#     path("jewellery/", include("jewellery_erp.urls", namespace="jewellery_erp")),
-#     path("laptop/", include("laptop_erp.urls", namespace="laptop_erp")),
-# ]
 
 from django.contrib import admin
 from django.urls import path, include
@@ -37,8 +26,8 @@ urlpatterns = [
 
     path("accounts/", include("accounts.urls")),
 
-    path("medical/", include("medical_erp.urls")),
-    path("electronics/", include("electronics_erp.urls")),
+    # path("medical/", include("medical_erp.urls")),
+    # path("electronics/", include("electronics_erp.urls")),
 
     path("", include("core.urls")),  # super admin urls
     path("erp/<str:erp_code>/", ERPDispatcherView.as_view(), name="erp-dispatch"),

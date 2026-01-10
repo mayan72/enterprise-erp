@@ -1,0 +1,238 @@
+{% extends "core/client/base.html" %}
+
+{% block content %}
+<style>
+  /* ===============================
+     Design System Variables
+     =============================== */
+  :root {
+    --bg-main: #0f172a;
+    --bg-surface: #111827;
+    --bg-card: #1f2933;
+    --border-subtle: #2a3441;
+    --text-primary: #f9fafb;
+    --text-secondary: #cbd5e1;
+    --accent-primary: #6366f1;   /* Indigo */
+    --accent-secondary: #f59e0b; /* Amber */
+    --radius-lg: 14px;
+    --radius-md: 10px;
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.35s ease;
+  }
+
+  /* ===============================
+     Page Container
+     =============================== */
+  .upload-page {
+    background: linear-gradient(180deg, var(--bg-main), #020617);
+    padding: 3rem 2rem;
+    min-height: calc(100vh - 80px);
+    color: var(--text-primary);
+    animation: fadeIn 0.6s ease both;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ===============================
+     Header
+     =============================== */
+  .upload-header {
+    margin-bottom: 2rem;
+  }
+
+  .upload-header h2 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.3rem;
+  }
+
+  .upload-header p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    max-width: 640px;
+  }
+
+  /* ===============================
+     Table Wrapper
+     =============================== */
+  .table-wrapper {
+    background: linear-gradient(180deg, var(--bg-card), #111827);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(2, 6, 23, 0.6);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  thead {
+    background: rgba(99, 102, 241, 0.12);
+  }
+
+  thead th {
+    text-align: left;
+    padding: 0.9rem 1rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    border-bottom: 1px solid var(--border-subtle);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    transition: background var(--transition-fast);
+  }
+
+  tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  tbody td {
+    padding: 0.85rem 1rem;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+  }
+
+  tbody td:first-child,
+  tbody td:nth-child(2) {
+    white-space: nowrap;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+
+  /* ===============================
+     Row Data Styling
+     =============================== */
+  .row-data strong {
+    color: var(--accent-secondary);
+    font-weight: 600;
+  }
+
+  .row-data {
+    line-height: 1.45;
+  }
+
+  /* ===============================
+     Empty State
+     =============================== */
+  .empty-state {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  /* ===============================
+     Responsive
+     =============================== */
+  @media (max-width: 768px) {
+    .upload-page {
+      padding: 2rem 1.25rem;
+    }
+
+    thead {
+      display: none;
+    }
+
+    table,
+    tbody,
+    tr,
+    td {
+      display: block;
+      width: 100%;
+    }
+
+    tbody tr {
+      margin-bottom: 1rem;
+      border-bottom: none;
+    }
+
+    tbody td {
+      border-bottom: none;
+      padding: 0.6rem 0.9rem;
+    }
+
+    tbody td::before {
+      content: attr(data-label);
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+  }
+
+  /* ===============================
+     Reduced Motion
+     =============================== */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<div class="upload-page">
+  <div class="upload-header">
+    <h2>{{ upload_type|title }} Data</h2>
+    <p>
+      Review uploaded {{ upload_type|lower }} records, including business dates and raw payload details.
+    </p>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Uploaded At</th>
+          <th>Business Date</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in records %}
+        <tr>
+          <td data-label="Uploaded At">
+            {{ r.uploaded_at }}
+          </td>
+          <td data-label="Business Date">
+            {{ r.business_date|default:"-" }}
+          </td>
+          <td data-label="Data">
+            <div class="row-data">
+              {% for key, value in r.row_data.items %}
+                <strong>{{ key }}</strong>: {{ value }}<br>
+              {% endfor %}
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3">
+            <div class="empty-state">
+              No data uploaded yet.
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -75,10 +75,6 @@ INSTALLED_APPS = [
     "accounts",
     "core",
     "subscriptions",
-    "medical_erp",
-    "electronics_erp",
-    "jewellery_erp",
-    "laptop_erp",
     "generic_erp",
 ]
 

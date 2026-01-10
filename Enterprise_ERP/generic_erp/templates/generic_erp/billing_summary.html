@@ -1,0 +1,14 @@
+<h2>Daily Billing Summary</h2>
+
+<table border="1" width="50%">
+    <tr>
+        <th>Date</th>
+        <th>Total Amount</th>
+    </tr>
+    {% for row in summary %}
+    <tr>
+        <td>{{ row.sale_date }}</td>
+        <td>{{ row.total_amount }}</td>
+    </tr>
+    {% endfor %}
+</table>

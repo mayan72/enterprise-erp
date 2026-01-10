@@ -1,19 +1,251 @@
 {% extends "core/client/base.html" %}
-
 {% block content %}
+<style>
+  /* ===============================
+     Design System Variables
+     =============================== */
+  :root {
+    --bg-main: #0f172a;            /* Slate 900 */
+    --bg-surface: #111827;         /* Gray 900 */
+    --bg-card: #1f2933;            /* Gray 800 */
+    --border-subtle: #2a3441;
+    --text-primary: #f9fafb;
+    --text-secondary: #cbd5e1;
+    --accent-primary: #6366f1;     /* Indigo */
+    --accent-secondary: #f59e0b;   /* Amber */
+    --radius-lg: 14px;
+    --radius-md: 10px;
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.35s ease;
+  }
 
-<div class="erp-badge">
+  /* ===============================
+     Base Layout
+     =============================== */
+  .erp-dashboard {
+    background: linear-gradient(
+      180deg,
+      var(--bg-main) 0%,
+      #020617 100%
+    );
+    padding: 3rem 2rem;
+    min-height: calc(100vh - 80px);
+    color: var(--text-primary);
+    animation: fadeIn 0.6s ease both;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ===============================
+     Header / Badge
+     =============================== */
+  .erp-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.9rem;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    margin-bottom: 1.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+  }
+
+  .erp-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+    max-width: 640px;
+  }
+
+  /* ===============================
+     Grid Layout
+     =============================== */
+  .erp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* ===============================
+     Cards
+     =============================== */
+  .erp-card {
+    position: relative;
+    background: linear-gradient(
+      180deg,
+      var(--bg-card) 0%,
+      #111827 100%
+    );
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition:
+      transform var(--transition-base),
+      box-shadow var(--transition-base),
+      border-color var(--transition-fast);
+  }
+
+  .erp-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      400px circle at top left,
+      rgba(99, 102, 241, 0.12),
+      transparent 40%
+    );
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    pointer-events: none;
+  }
+
+  .erp-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(99, 102, 241, 0.6);
+    box-shadow:
+      0 10px 30px rgba(2, 6, 23, 0.7),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  }
+
+  .erp-card:hover::after {
+    opacity: 1;
+  }
+
+  .erp-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .erp-card p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  /* ===============================
+     Action Links (Buttons)
+     =============================== */
+  .erp-card a {
+    align-self: flex-start;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--bg-main);
+    background: linear-gradient(
+      135deg,
+      var(--accent-primary),
+      #818cf8
+    );
+    padding: 0.55rem 1.1rem;
+    border-radius: var(--radius-md);
+    transition:
+      transform var(--transition-fast),
+      box-shadow var(--transition-fast),
+      filter var(--transition-fast);
+  }
+
+  .erp-card a:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.45);
+  }
+
+  .erp-card a:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(99, 102, 241, 0.35);
+  }
+
+  /* ===============================
+     Reduced Motion Support
+     =============================== */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* ===============================
+     Responsive Adjustments
+     =============================== */
+  @media (max-width: 640px) {
+    .erp-dashboard {
+      padding: 2rem 1.25rem;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+    }
+  }
+</style>
+
+<div class="erp-dashboard">
+  <div class="erp-badge">
     <i data-lucide="{{ erp.icon }}"></i>
     {{ erp.name }}
+  </div>
+
+  <h2>{{ erp.name }} Dashboard</h2>
+  <p class="erp-subtitle">
+    Manage operations for {{ erp.name }} using a centralized, enterprise-grade control panel.
+  </p>
+
+  <div class="erp-grid">
+    <div class="erp-card">
+      <div>
+        <h3>Products</h3>
+        <p>Manage master product data, attributes, and configurations.</p>
+      </div>
+      <a href="{% url 'generic_erp:bulk-upload' erp.code 'products' %}">
+        Manage Products →
+      </a>
+    </div>
+
+    <div class="erp-card">
+      <div>
+        <h3>Stock</h3>
+        <p>Monitor inventory levels, stock movements, and availability.</p>
+      </div>
+      <a href="{% url 'generic_erp:bulk-upload' erp.code 'stock' %}">
+        Manage Stock →
+      </a>
+    </div>
+
+    <div class="erp-card">
+      <div>
+        <h3>Billing</h3>
+        <p>Control pricing, invoices, and financial transactions.</p>
+      </div>
+      <a href="{% url 'generic_erp:bulk-upload' erp.code 'billing' %}">
+        Manage Billing →
+      </a>
+    </div>
+  </div>
 </div>
-
-<h2>{{ erp.name }} Dashboard</h2>
-<p>Manage operations for {{ erp.name }}</p>
-
-<div class="erp-grid">
-    <div class="erp-card">Products (Coming Soon)</div>
-    <div class="erp-card">Stock (Coming Soon)</div>
-    <div class="erp-card">Billing (Coming Soon)</div>
-</div>
-
 {% endblock %}

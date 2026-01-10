@@ -3,45 +3,80 @@
 {% block content %}
 
 <style>
+    /* ================= PREMIUM DARK ERP TOKENS ================= */
+    :root {
+        --bg-main: #0F172A;        /* Deep Navy */
+        --bg-card: #1E293B;        /* Dark Slate */
+
+        --primary: #38BDF8;        /* Electric Blue */
+        --accent: #10B981;         /* Emerald */
+
+        --text-main: #E5E7EB;      /* Light Gray */
+        --text-muted: #94A3B8;     /* Muted Blue */
+
+        --border: #273244;
+
+        --radius: 16px;
+
+        --shadow-soft: 0 14px 36px rgba(0, 0, 0, 0.45);
+        --shadow-hover: 0 22px 52px rgba(0, 0, 0, 0.65);
+    }
+
+    /* ================= CENTER LAYOUT ================= */
     .center-wrapper {
         min-height: calc(100vh - 120px);
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 20px;
+        animation: fadeUp 0.6s ease;
     }
 
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ================= FORM CARD ================= */
     .form-card {
         width: 100%;
-        max-width: 900px;
-        background: #ffffff;
-        border-radius: 14px;
-        padding: 26px 28px;
-        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.08);
+        max-width: 920px;
+        background: linear-gradient(
+            180deg,
+            #1E293B,
+            #162033
+        );
+        border-radius: var(--radius);
+        padding: 34px 36px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-soft);
     }
 
+    /* ================= FORM HEADER ================= */
     .form-header {
         text-align: center;
-        margin-bottom: 18px;
+        margin-bottom: 28px;
     }
 
     .form-header h2 {
         margin: 0;
-        font-size: 20px;
+        font-size: 22px;
         font-weight: 600;
-        color: #1f2937;
+        color: var(--text-main);
+        letter-spacing: 0.3px;
     }
 
     .form-header p {
-        margin-top: 4px;
+        margin-top: 6px;
         font-size: 13px;
-        color: #6b7280;
+        color: var(--text-muted);
     }
 
-    /* ===== GRID FORM ===== */
+    /* ================= FORM GRID ================= */
     .form-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 14px 20px;
+        gap: 18px 24px;
     }
 
     form p {
@@ -52,70 +87,87 @@
         display: block;
         font-size: 12px;
         font-weight: 500;
-        color: #374151;
-        margin-bottom: 4px;
+        color: var(--text-main);
+        margin-bottom: 6px;
+        letter-spacing: 0.2px;
     }
 
     form input,
     form select {
         width: 100%;
-        padding: 10px 12px;
-        border-radius: 8px;
-        border: 1px solid #e5e7eb;
+        padding: 11px 13px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
         font-size: 13px;
+        background: #0F172A;
+        color: var(--text-main);
         transition: border 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    form input::placeholder {
+        color: var(--text-muted);
     }
 
     form input:focus,
     form select:focus {
         outline: none;
-        border-color: #2563eb;
-        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
     }
 
-    /* ===== ACTIONS ===== */
+    /* ================= ACTIONS ================= */
     .form-actions {
         display: flex;
         justify-content: center;
-        gap: 14px;
-        margin-top: 22px;
+        gap: 18px;
+        margin-top: 34px;
     }
 
     .btn-primary {
-        padding: 10px 22px;
-        border-radius: 8px;
+        padding: 12px 28px;
+        border-radius: 10px;
         font-size: 13px;
-        font-weight: 500;
-        background: #2563eb;
-        color: #ffffff;
+        font-weight: 600;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        color: #020617;
         border: none;
         cursor: pointer;
-        transition: background 0.2s ease, transform 0.15s ease;
+        transition: transform 0.15s ease, box-shadow 0.2s ease;
     }
 
     .btn-primary:hover {
-        background: #1e40af;
         transform: translateY(-1px);
+        box-shadow: var(--shadow-hover);
     }
 
     .btn-secondary {
-        padding: 10px 22px;
-        border-radius: 8px;
+        padding: 12px 28px;
+        border-radius: 10px;
         font-size: 13px;
-        font-weight: 500;
-        background: #f3f4f6;
-        color: #374151;
+        font-weight: 600;
+        background: transparent;
+        color: var(--text-muted);
+        border: 1px solid var(--border);
         text-decoration: none;
+        transition: background 0.2s ease, color 0.2s ease;
     }
 
     .btn-secondary:hover {
-        background: #e5e7eb;
+        background: #0F172A;
+        color: var(--text-main);
     }
 
-    /* ===== RESPONSIVE FALLBACK ===== */
+    /* ================= RESPONSIVE ================= */
     @media (max-width: 768px) {
         .form-grid {
             grid-template-columns: 1fr;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation: none !important;
+            transition: none !important;
         }
     }
 </style>
@@ -131,7 +183,6 @@
         <form method="post">
             {% csrf_token %}
 
-            <!-- TWO COLUMN FORM -->
             <div class="form-grid">
                 {{ form.as_p }}
             </div>
