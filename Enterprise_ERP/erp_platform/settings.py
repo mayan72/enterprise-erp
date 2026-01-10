@@ -34,7 +34,10 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["*"]  # tighten for production
+# ALLOWED_HOSTS = ["*"]  # tighten for production
+ALLOWED_HOSTS = [
+    "mackkk.pythonanywhere.com",
+]
 
 DATABASES = {
     "default": {
@@ -129,6 +132,13 @@ CSRF_COOKIE_SECURE = False  # True only with HTTPS
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://mackkk.pythonanywhere.com",
+]
+
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -219,3 +229,7 @@ LOGGING = {
         # You can have other loggers (db, business events, etc.)
     },
 }
+
+
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
